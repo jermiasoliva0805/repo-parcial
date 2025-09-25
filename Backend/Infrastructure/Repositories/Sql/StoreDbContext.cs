@@ -11,6 +11,7 @@ namespace Infrastructure.Repositories.Sql
     {
         //public DbSet<DummyEntity> DummyEntity { get; set; }
         public DbSet<Alumno> Alumno { get; set; }
+        public DbSet<Automovil> Automovil { get; set; }
 
         public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options)
         {
@@ -29,6 +30,9 @@ namespace Infrastructure.Repositories.Sql
         {
             modelBuilder.Entity<DummyEntity>().ToTable("DummyEntity");
             modelBuilder.Entity<Alumno>().ToTable("Alumno");
+            modelBuilder.Entity<Automovil>().ToTable("Automovil");
         }
+        
+
     }
 }
