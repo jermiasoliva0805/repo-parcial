@@ -1,4 +1,5 @@
-﻿using Application.Repositories;
+﻿using Application.ApplicationServices;
+using Application.Repositories;
 using Core.Application;
 using Core.Infraestructure;
 using Domain.Others.Utils;
@@ -29,6 +30,9 @@ namespace Infrastructure.Registrations
             /* Adapters */
             services.AddSingleton<IExternalApiClient, ExternalApiHttpAdapter>();
 
+            /* Application Services */
+            services.AddScoped<IAutomovilApplicationService, AutomovilApplicationService>();
+
             return services;
         }
 
@@ -40,5 +44,7 @@ namespace Infrastructure.Registrations
 
             return services;
         }
+
+       
     }
 }

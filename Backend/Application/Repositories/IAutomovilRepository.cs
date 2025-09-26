@@ -9,4 +9,6 @@ using System.Threading.Tasks;
 namespace Application.Repositories
 {
     public interface IAutomovilRepository : IRepository<Automovil> { }
+   
+
 }

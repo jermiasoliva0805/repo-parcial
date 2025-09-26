@@ -43,5 +43,7 @@ namespace Application.Registrations
             services.AddTransient<DummyEntityCreatedIntegrationEventHandlerSub>();
             return services;
         }
+
+
     }
 }
