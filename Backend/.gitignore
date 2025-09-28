@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#para que no se suba la carpeta de migraciones
+Backend/Infrastructure/Migrations/
