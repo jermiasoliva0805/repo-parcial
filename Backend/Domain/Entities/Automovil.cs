@@ -17,11 +17,11 @@ namespace Domain.Entities
         public string NumeroChasis { get; private set; }
         public string CodigoInterno { get; private set; }
         protected Automovil() { }
-        public Automovil(string marca, string modelo, int fabricacion, string
-       numeroMotor, string numeroChasis)
+        public Automovil(string marca, string modelo, string color, int fabricacion, string numeroMotor, string numeroChasis)
         {
             Marca = marca;
             Modelo = modelo;
+            Color = color;
             Fabricacion = fabricacion;
             NumeroMotor = numeroMotor;
             NumeroChasis = numeroChasis;
