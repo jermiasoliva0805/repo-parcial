@@ -1,11 +1,12 @@
-﻿using Application.UseCases.Automovil.Commands.DeleteAutomovil;
+﻿using Application.Repositories;
+using Application.UseCases.Automovil.Commands.DeleteAutomovil;
+using Application.UseCases.Automovil.Commands.UpdateAutomovil;
 using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
 using Controllers;
 using Core.Application;
 using MediatR; // O la referencia a tu librería de ICommandQueryBus
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Application.UseCases.Automovil.Commands.UpdateAutomovil;
 
 
 // NOTA: Reemplaza estos 'usings' con la ubicación real de tus Comandos, Queries y DTOs
@@ -22,13 +23,17 @@ public class AutomovilController : BaseController // Asumo que BaseController es
 {
     // Utilizaré IMediator como placeholder para ICommandQueryBus, que es su rol común
     private readonly ICommandQueryBus _commandQueryBus;
+    private readonly IAutomovilRepository _automovilRepository;
 
-    public AutomovilController(ICommandQueryBus commandQueryBus)
+    public AutomovilController(IAutomovilRepository automovilRepository, ICommandQueryBus commandQueryBus)
     {
         _commandQueryBus = commandQueryBus ?? throw new
             ArgumentNullException(nameof(commandQueryBus));
-    }
 
+        _automovilRepository = automovilRepository;
+        _commandQueryBus = commandQueryBus;
+    }
+   
     // ---------------------------------------------------------------------------------------
     // 1. Create (Crear un nuevo automóvil)
     // Método HTTP: POST | Ruta: /api/v1/automovil
@@ -83,13 +88,23 @@ public class AutomovilController : BaseController // Asumo que BaseController es
         return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); // Status Code 200 (como pide la consigna)
     }
 
-    [HttpPut("api/v1/[Controller]/{id}")]
-    public async Task<IActionResult> Update(UpdateAutomovilCommand command)
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateAutomovilCommand command)
     {
-        if (command is null) return BadRequest();
+        command.AutomovilId = id; // aseguramos que usemos el id de la URL
 
-        await _commandQueryBus.Send(command);
+        var result = await _commandQueryBus.Send(command);
 
-        return NoContent();
+        if (!result)
+            return NotFound(new { mensaje = $"Automovil con ID {id} no encontrado" });
+
+        // Buscar el objeto actualizado para devolverlo
+        var automovilActualizado = await _automovilRepository.FindOneAsync(id);
+
+        //return Ok(automovilActualizado);
+        return Ok(new { mensaje = "Automovil actualizado correctamente" }); // Código 200
     }
+
+
 }

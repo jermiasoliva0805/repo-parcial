@@ -7,22 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using static Domain.Enums.Enums;
 
+
 namespace Application.UseCases.Automovil.Commands.UpdateAutomovil
 {
-    public class UpdateAutomovilCommand : IRequestCommand
+    // El Command debe devolver 'bool' para que el Controller sepa si se encontró o no
+    public class UpdateAutomovilCommand : IRequestCommand<bool>
     {
-        public string Marca { get; private set; }
-        public string Modelo { get; private set; }
-        public string Color { get; private set; }
-        public int Fabricacion { get; private set; }
-        public string NumeroMotor { get; private set; }
-        public string NumeroChasis { get; private set; }
-        public string CodigoInterno { get; private set; }
+        // El ID que viene de la ruta del Controller
+        public int AutomovilId { get; set; }
 
-        public string AutomovilPropertyOne { get; set; }
-        public AutomovilValues AutomovilPropertyTwo { get; set; }
+        // Propiedades a actualizar (vienen del cuerpo JSON)
+        public string Color { get; set; }
+        public string NumeroMotor { get; set; }
 
-
+        // Constructor requerido para el binding en el Controller
+        public UpdateAutomovilCommand() { }
     }
 }
 
