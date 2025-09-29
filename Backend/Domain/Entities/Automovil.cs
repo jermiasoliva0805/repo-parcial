@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Validators;
+using static Domain.Enums.Enums;
 namespace Domain.Entities
 {
     public class Automovil : DomainEntity<int, AutomovilValidator>
@@ -16,6 +17,9 @@ namespace Domain.Entities
         public string NumeroMotor { get; private set; }
         public string NumeroChasis { get; private set; }
         public string CodigoInterno { get; private set; }
+
+        public string AutomovilPropertyOne { get; private set; }
+        public AutomovilValues AutomovilPropertyTwo { get; private set; }
         protected Automovil() { }
         public Automovil(string marca, string modelo, string color, int fabricacion, string numeroMotor, string numeroChasis)
         {
@@ -32,6 +36,17 @@ namespace Domain.Entities
             return $"{marca.Substring(0, 3).ToUpper()}-{modelo.Substring(0,
            3).ToUpper()}-{DateTime.Now:yyyyMMddHHmmss}";
         }
+
+        public void SetautomovilPropertyOne(string value)
+        {
+           AutomovilPropertyOne = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        public void SetautomovilPropertyTwo(AutomovilValues value)
+        {
+           AutomovilPropertyTwo = value;
+        }
+       
     }
 
 }

@@ -1,9 +1,12 @@
 ﻿using Application.UseCases.Automovil.Commands.DeleteAutomovil;
+using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
 using Controllers;
 using Core.Application;
 using MediatR; // O la referencia a tu librería de ICommandQueryBus
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Application.UseCases.Automovil.Commands.UpdateAutomovil;
+
 
 // NOTA: Reemplaza estos 'usings' con la ubicación real de tus Comandos, Queries y DTOs
 // using AUTOMOVIL10.Application.Automoviles.Commands;
@@ -78,5 +81,15 @@ public class AutomovilController : BaseController // Asumo que BaseController es
         }
 
         return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); // Status Code 200 (como pide la consigna)
+    }
+
+    [HttpPut("api/v1/[Controller]/{id}")]
+    public async Task<IActionResult> Update(UpdateAutomovilCommand command)
+    {
+        if (command is null) return BadRequest();
+
+        await _commandQueryBus.Send(command);
+
+        return NoContent();
     }
 }

@@ -2,6 +2,7 @@
 using Application.DomainEvents;
 using AutoMapper;
 using Domain.Entities;
+using Automovil = Domain.Entities.Automovil;
 
 namespace Application.Mappings
 {
@@ -13,7 +14,7 @@ namespace Application.Mappings
         public Mapping()
         {
             CreateMap<DummyEntity, DummyEntityCreated>().ReverseMap();
-            CreateMap<DummyEntity, DummyEntityUpdated>().ReverseMap();
+            CreateMap<DummyEntity, AutomovilUpdated>().ReverseMap();
             CreateMap<DummyEntity, DummyEntityDto>().ReverseMap();
             CreateMap<Automovil, AutomovilCreado>().ReverseMap();
 
