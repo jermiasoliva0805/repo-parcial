@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Application.UseCases.Automovil.Commands.DeleteAutomovil;
 using Application.UseCases.Automovil.Commands.UpdateAutomovil;
+using Application.UseCases.Automovil.Queries.GetAutomovilById;
 using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
 using Controllers;
 using Core.Application;
@@ -85,26 +86,47 @@ public class AutomovilController : BaseController // Asumo que BaseController es
             return NotFound($"Automóvil con ID {id} no encontrado para eliminar.");
         }
 
-        return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); // Status Code 200 (como pide la consigna)
+        return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); // Status Code 200 
     }
 
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateAutomovilCommand command)
     {
-        command.AutomovilId = id; // aseguramos que usemos el id de la URL
+        command.AutomovilId = id; 
 
         var result = await _commandQueryBus.Send(command);
 
         if (!result)
             return NotFound(new { mensaje = $"Automovil con ID {id} no encontrado" });
 
-        // Buscar el objeto actualizado para devolverlo
+       
         var automovilActualizado = await _automovilRepository.FindOneAsync(id);
 
-        //return Ok(automovilActualizado);
-        return Ok(new { mensaje = "Automovil actualizado correctamente" }); // Código 200
+       
+        return Ok(new { mensaje = "Automovil actualizado correctamente" }); 
     }
 
+   
+    [HttpGet("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        // (La ruta le pasa el ID)
+        var query = new GetAutomovilByIdQuery(id);
 
+        //  (El Handler devolverá la entidad o null)
+        var automovil = await _commandQueryBus.Send(query);
+
+        // Verificar el resultado
+        if (automovil is null)
+        {
+            // Si el Handler devuelve null, respondemos 404 Not Found
+            return NotFound($"Automóvil con ID {id} no encontrado.");
+        }
+
+        //  Si encontramos la entidad, respondemos 200 OK con el objeto
+        return Ok(automovil);
+    }
 }
