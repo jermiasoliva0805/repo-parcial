@@ -46,7 +46,25 @@ namespace Domain.Entities
         {
            AutomovilPropertyTwo = value;
         }
-       
+
+        public void UpdateColor(string newColor)
+        {
+            // Solo actualiza si el valor no es nulo O cadena vacía
+            if (!string.IsNullOrEmpty(newColor))
+            {
+                Color = newColor;
+            }
+        }
+
+        public void UpdateNumeroMotor(string newNumeroMotor)
+        {
+            // Solo actualiza si el valor no es nulo O cadena vacía
+            if (!string.IsNullOrEmpty(newNumeroMotor))
+            {
+                NumeroMotor = newNumeroMotor;
+            }
+        }
+
     }
 
 }
