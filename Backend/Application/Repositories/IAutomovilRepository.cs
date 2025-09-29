@@ -8,7 +8,16 @@ using System.Threading.Tasks;
 
 namespace Application.Repositories
 {
-    public interface IAutomovilRepository : IRepository<Automovil> { }
+    public interface IAutomovilRepository : IRepository<Automovil> 
+    {
+        Task<Domain.Entities.Automovil> FindOneByChasisAsync(string chasis);
+
+    }
    
+
+
+
+
+
 
 }
