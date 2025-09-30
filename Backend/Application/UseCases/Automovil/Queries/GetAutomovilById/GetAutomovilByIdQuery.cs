@@ -13,7 +13,7 @@ namespace Application.UseCases.Automovil.Queries.GetAutomovilById
         // El ID que viene de la ruta del Controller
         public int AutomovilId { get; set; }
 
-        // Constructor para inicializar el ID desde el Controller
+        // Constructor para inicializar el ID desde el Controller             
         public GetAutomovilByIdQuery(int id)
         {
             AutomovilId = id;

@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Application.UseCases.Automovil.Commands.DeleteAutomovil;
 using Application.UseCases.Automovil.Commands.UpdateAutomovil;
+using Application.UseCases.Automovil.Queries.GetAutomovilByChasis;
 using Application.UseCases.Automovil.Queries.GetAutomovilById;
 using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
 using Controllers;
@@ -128,5 +129,30 @@ public class AutomovilController : BaseController // Asumo que BaseController es
 
         //  Si encontramos la entidad, respondemos 200 OK con el objeto
         return Ok(automovil);
+
     }
+
+
+    [HttpGet("chasis/{numeroChasis}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]         // 200
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]  // 404
+    public async Task<IActionResult> GetByChasis([FromRoute] string numeroChasis)
+    {
+        // 1. Crear la Query con el parámetro de la ruta
+        var query = new GetAutomovilByChasisQuery(numeroChasis);
+
+        // 2. Enviar la Query al Bus (El Handler devolverá la entidad o null)
+        var automovil = await _commandQueryBus.Send(query);
+
+        // 3. Verificar el resultado
+        if (automovil is null)
+        {
+            // Si el Handler devuelve null, respondemos 404 Not Found
+            return NotFound($"Automóvil con chasis {numeroChasis} no encontrado.");
+        }
+
+        // 4. Si encontramos la entidad, respondemos 200 OK con el objeto
+        return Ok(automovil);
+    }
+
 }
