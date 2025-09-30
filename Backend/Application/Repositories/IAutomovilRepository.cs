@@ -13,11 +13,5 @@ namespace Application.Repositories
         Task<Domain.Entities.Automovil> FindOneByChasisAsync(string chasis);
 
     }
-   
-
-
-
-
-
 
 }

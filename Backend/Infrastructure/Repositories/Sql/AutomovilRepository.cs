@@ -21,6 +21,7 @@ namespace Infrastructure.Repositories.Sql
             return await Repository.FirstOrDefaultAsync(a => a.NumeroChasis == numeroChasis);
         }
 
+       
 
     }
 

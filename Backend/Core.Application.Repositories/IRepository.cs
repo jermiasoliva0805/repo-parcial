@@ -16,6 +16,9 @@ namespace Core.Application.Repositories
         void Update(object id, TEntity entity);
 
         IQueryable<TEntity> Query();
+       
+        
+     
 
     }
 }

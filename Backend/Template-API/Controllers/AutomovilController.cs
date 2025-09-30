@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Application.UseCases.Automovil.Commands.DeleteAutomovil;
 using Application.UseCases.Automovil.Commands.UpdateAutomovil;
+using Application.UseCases.Automovil.Queries.GetAllAutomoviles;
 using Application.UseCases.Automovil.Queries.GetAutomovilByChasis;
 using Application.UseCases.Automovil.Queries.GetAutomovilById;
 using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
@@ -155,4 +156,20 @@ public class AutomovilController : BaseController // Asumo que BaseController es
         return Ok(automovil);
     }
 
+
+    [HttpGet] // Ruta: /api/v1/automovil (se combina con la ruta base de la clase)
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetAll()
+    {
+        // 1. Crear la Query (la pregunta)
+        var query = new GetAllAutomovilesQuery();
+
+        // 2. Enviar la Query al Bus. El Handler devolverá la lista.
+        // El tipo de retorno es List<Automovil>
+        var automoviles = await _commandQueryBus.Send(query);
+
+        // 3. Responder 200 OK con el cuerpo de la lista.
+        // Si la lista está vacía, devuelve un array JSON vacío: [].
+        return Ok(automoviles);
+    }
 }

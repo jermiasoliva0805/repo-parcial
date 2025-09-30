@@ -1,5 +1,6 @@
 ﻿using Core.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Core.Infraestructure.Repositories.Sql
@@ -51,6 +52,7 @@ namespace Core.Infraestructure.Repositories.Sql
             return await Repository.ToListAsync();
         }
 
+
         public TEntity FindOne(params object[] keyValues)
         {
             return Repository.Find(keyValues);
@@ -87,5 +89,6 @@ namespace Core.Infraestructure.Repositories.Sql
             return Context.Set<TEntity>();
         }
 
+    
     }
 }
