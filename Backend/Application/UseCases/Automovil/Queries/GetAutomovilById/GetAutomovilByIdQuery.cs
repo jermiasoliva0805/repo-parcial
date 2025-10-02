@@ -10,10 +10,10 @@ namespace Application.UseCases.Automovil.Queries.GetAutomovilById
    
     public class GetAutomovilByIdQuery : IRequestQuery<Domain.Entities.Automovil>
     {
-        // El ID que viene de la ruta del Controller
+        
         public int AutomovilId { get; set; }
 
-        // Constructor para inicializar el ID desde el Controller             
+                     
         public GetAutomovilByIdQuery(int id)
         {
             AutomovilId = id;

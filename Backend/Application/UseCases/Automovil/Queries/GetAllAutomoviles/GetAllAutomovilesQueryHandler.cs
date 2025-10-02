@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.Automovil.Queries.GetAllAutomoviles
 {
-    // 2. Implementa IRequestQueryHandler, manejando la Query y devolviendo el List<Automovil>
+    
     internal sealed class GetAllAutomovilesQueryHandler :
         IRequestQueryHandler<GetAllAutomovilesQuery, List<Domain.Entities.Automovil>>
     {
@@ -20,12 +20,12 @@ namespace Application.UseCases.Automovil.Queries.GetAllAutomoviles
 
         public async Task<List<Domain.Entities.Automovil>> Handle(GetAllAutomovilesQuery request, CancellationToken cancellationToken)
         {
-            // 3. Llama al método FindAllAsync() del repositorio.
-            // Esto devolverá la lista de entidades.
+            
+           
             List<Domain.Entities.Automovil> entities = await _automovilRepository.FindAllAsync();
 
-            // Nota: Aquí se podría mapear a un DTO si la capa de presentación lo necesitara,
-            // pero para simplificar, devolvemos la entidad de Dominio directamente.
+            
+            
 
             return entities;
         }

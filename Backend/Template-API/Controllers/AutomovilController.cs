@@ -7,24 +7,20 @@ using Application.UseCases.Automovil.Queries.GetAutomovilById;
 using Application.UseCases.DummyEntity.Commands.UpdateDummyEntity;
 using Controllers;
 using Core.Application;
-using MediatR; // O la referencia a tu librería de ICommandQueryBus
+using MediatR; 
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 
-// NOTA: Reemplaza estos 'usings' con la ubicación real de tus Comandos, Queries y DTOs
-// using AUTOMOVIL10.Application.Automoviles.Commands;
-// using AUTOMOVIL10.Application.Automoviles.Queries;
-// using AUTOMOVIL10.Application.Automoviles.Dtos;
 
 
-// La ruta base para todos los endpoints es /api/v1/automovil
+
 [ApiController]
 [Route("api/v1/[controller]")]
-// [controller] se resuelve a "Automovil" en tiempo de ejecución.
-public class AutomovilController : BaseController // Asumo que BaseController está definido
+
+public class AutomovilController : BaseController
 {
-    // Utilizaré IMediator como placeholder para ICommandQueryBus, que es su rol común
+    
     private readonly ICommandQueryBus _commandQueryBus;
     private readonly IAutomovilRepository _automovilRepository;
 
@@ -37,11 +33,7 @@ public class AutomovilController : BaseController // Asumo que BaseController es
         _commandQueryBus = commandQueryBus;
     }
    
-    // ---------------------------------------------------------------------------------------
-    // 1. Create (Crear un nuevo automóvil)
-    // Método HTTP: POST | Ruta: /api/v1/automovil
-    // Respuesta: 201 - Objeto del automóvil creado con su id asignado.
-    // ---------------------------------------------------------------------------------------
+    
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -49,28 +41,14 @@ public class AutomovilController : BaseController // Asumo que BaseController es
     {
         if (command is null) return BadRequest("El cuerpo de la solicitud no puede ser nulo.");
 
-        // El bus envía el comando de creación y espera el ID del nuevo recurso.
+        
         var id = await _commandQueryBus.Send(command);
 
-        // La respuesta CreatedAtAction devuelve el status 201.
-        //return CreatedAtAction(nameof(GetById), new { id = id }, new { Id = id });
+        
         return Created($"api/v1/[controller]/{id}", new { Id = id });
     }
 
-    // ---------------------------------------------------------------------------------------
-    // 6. GetAll (Obtener todos los automóviles registrados)
-    // Método HTTP: GET | Ruta: /api/v1/automovil
-    // Respuesta: 200 - Lista de objetos de automóviles.
-    // ---------------------------------------------------------------------------------------
    
-
-   
-
-    // ---------------------------------------------------------------------------------------
-    // 2. Delete (Eliminar un automóvil por ID)
-    // Método HTTP: DELETE | Ruta: /api/v1/automovil/{id}
-    // Respuesta: 200 Confirmación de eliminación o mensaje de error (404).
-    // ---------------------------------------------------------------------------------------
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -78,9 +56,7 @@ public class AutomovilController : BaseController // Asumo que BaseController es
     {
         var command = new DeleteAutomovilCommand(id);
 
-        // Se asume que el comando devuelve un booleano o el objeto eliminado. 
-        // Si no se encuentra, el CommandHandler debería lanzar una excepción
-        // o devolver 'false', lo que aquí se mapea a NotFound.
+      
         var deletedSuccessfully = await _commandQueryBus.Send(command);
 
         if (!deletedSuccessfully)
@@ -88,7 +64,7 @@ public class AutomovilController : BaseController // Asumo que BaseController es
             return NotFound($"Automóvil con ID {id} no encontrado para eliminar.");
         }
 
-        return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); // Status Code 200 
+        return Ok(new { Message = $"Automóvil con ID {id} eliminado correctamente." }); 
     }
 
 
@@ -115,61 +91,61 @@ public class AutomovilController : BaseController // Asumo que BaseController es
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-        // (La ruta le pasa el ID)
+        
         var query = new GetAutomovilByIdQuery(id);
 
-        //  (El Handler devolverá la entidad o null)
+        
         var automovil = await _commandQueryBus.Send(query);
 
-        // Verificar el resultado
+        
         if (automovil is null)
         {
-            // Si el Handler devuelve null, respondemos 404 Not Found
+            
             return NotFound($"Automóvil con ID {id} no encontrado.");
         }
 
-        //  Si encontramos la entidad, respondemos 200 OK con el objeto
+       
         return Ok(automovil);
 
     }
 
 
     [HttpGet("chasis/{numeroChasis}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]         // 200
-    [ProducesResponseType((int)HttpStatusCode.NotFound)]  // 404
+    [ProducesResponseType((int)HttpStatusCode.OK)]        
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]  
     public async Task<IActionResult> GetByChasis([FromRoute] string numeroChasis)
     {
-        // 1. Crear la Query con el parámetro de la ruta
+        
         var query = new GetAutomovilByChasisQuery(numeroChasis);
 
-        // 2. Enviar la Query al Bus (El Handler devolverá la entidad o null)
+        
         var automovil = await _commandQueryBus.Send(query);
 
-        // 3. Verificar el resultado
+        
         if (automovil is null)
         {
-            // Si el Handler devuelve null, respondemos 404 Not Found
+            
             return NotFound($"Automóvil con chasis {numeroChasis} no encontrado.");
         }
 
-        // 4. Si encontramos la entidad, respondemos 200 OK con el objeto
+        
         return Ok(automovil);
     }
 
 
-    [HttpGet] // Ruta: /api/v1/automovil (se combina con la ruta base de la clase)
+    [HttpGet] 
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> GetAll()
     {
-        // 1. Crear la Query (la pregunta)
+        
         var query = new GetAllAutomovilesQuery();
 
-        // 2. Enviar la Query al Bus. El Handler devolverá la lista.
-        // El tipo de retorno es List<Automovil>
+       
+        
         var automoviles = await _commandQueryBus.Send(query);
 
-        // 3. Responder 200 OK con el cuerpo de la lista.
-        // Si la lista está vacía, devuelve un array JSON vacío: [].
+        
+       
         return Ok(automoviles);
     }
 }

@@ -14,10 +14,10 @@ namespace Infrastructure.Repositories.Sql
     {
          public AutomovilRepository(StoreDbContext context) : base(context) { }
 
-        // Buscar un automovil por número de chasis
+        
         public async Task<Automovil?> FindOneByChasisAsync(string numeroChasis)
         {
-            // Usamos Repository que ya viene del BaseRepository
+            
             return await Repository.FirstOrDefaultAsync(a => a.NumeroChasis == numeroChasis);
         }
 

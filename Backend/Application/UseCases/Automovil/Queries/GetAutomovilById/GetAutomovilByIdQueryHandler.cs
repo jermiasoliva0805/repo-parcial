@@ -12,7 +12,7 @@ namespace Application.UseCases.Automovil.Queries.GetAutomovilById
     {
         private readonly IAutomovilRepository _automovilRepository;
 
-        // Inyección de dependencias del repositorio
+        
         public GetAutomovilByIdQueryHandler(IAutomovilRepository automovilRepository)
         {
             _automovilRepository = automovilRepository;
@@ -20,8 +20,8 @@ namespace Application.UseCases.Automovil.Queries.GetAutomovilById
 
         public async Task<Domain.Entities.Automovil> Handle(GetAutomovilByIdQuery request, CancellationToken cancellationToken)
         {
-            // La lógica es simple: buscar por ID y devolver la entidad (o null si no existe)
-            // El Controller se encargará de mapear el 'null' a un 404 NotFound.
+            
+            
             Domain.Entities.Automovil entity = await _automovilRepository.FindOneAsync(request.AutomovilId);
 
             return entity;
